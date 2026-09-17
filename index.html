@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security_gag_legal — Карта доступа юрфирмы</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        @keyframes slowPulse {
+            0%, 100% { opacity: 0.6; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(4px); }
+        }
+        .animate-bounce-slow { animation: slowPulse 3s infinite ease-in-out; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+<div class="flex-grow flex flex-col h-full max-w-[1600px] mx-auto w-full p-4 sm:p-6 lg:p-8">
+
+    <header class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between border-b border-slate-200 pb-5">
+        <div>
+            <div class="flex items-center gap-3">
+                <span class="p-2 bg-indigo-100 text-indigo-700 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
+                    </svg>
+                </span>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Карта доступа <span class="text-indigo-600">Legal RAG Assist</span>
+                </h1>
+            </div>
+            <p class="text-slate-500 mt-1 text-sm sm:text-base">Юридическая фирма: практики, отдел договоров, роли и защита данных.</p>
+        </div>
+        <div class="mt-4 md:mt-0 flex gap-3 flex-wrap bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-sm">
+            <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-xs font-semibold bg-indigo-50 text-indigo-700">Root</span>
+                <span class="text-slate-600">Legal RAG Assist</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700">Level 1</span>
+                <span class="text-slate-600">Базы</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-50 text-amber-700">Level 2</span>
+                <span class="text-slate-600">Практики / договоры</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-8 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-5">
+            <div class="flex flex-col gap-1">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Режим отображения:</span>
+                <div class="inline-flex rounded-lg p-1 bg-slate-100 self-start">
+                    <button id="btn-diagram" onclick="switchView('diagram')" class="px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 bg-white text-slate-900 shadow-sm">🌳 Диаграмма</button>
+                    <button id="btn-matrix" onclick="switchView('matrix')" class="px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 text-slate-600 hover:text-slate-900">📋 Сводная матрица</button>
+                    <button id="btn-security" onclick="switchView('security')" class="px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 text-slate-600 hover:text-slate-900">🛡️ Безопасность и Промпты</button>
+                </div>
+            </div>
+            <div class="flex flex-col gap-1">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">👁️‍🗨️ Симуляция доступа для роли:</span>
+                <div class="inline-flex flex-wrap rounded-lg p-1 bg-indigo-50 border border-indigo-100 gap-0.5">
+                    <button onclick="setSimulatedRole('all')" id="sim-all" class="px-2 py-1 rounded-md text-[10px] font-semibold transition-all bg-indigo-600 text-white shadow-sm">Все</button>
+                    <button onclick="setSimulatedRole('consultant_admin')" id="sim-consultant_admin" class="px-2 py-1 rounded-md text-[10px] font-medium transition-all text-indigo-700 hover:bg-white/50">Адм. право</button>
+                    <button onclick="setSimulatedRole('consultant_labor')" id="sim-consultant_labor" class="px-2 py-1 rounded-md text-[10px] font-medium transition-all text-indigo-700 hover:bg-white/50">Трудовое</button>
+                    <button onclick="setSimulatedRole('consultant_corp')" id="sim-consultant_corp" class="px-2 py-1 rounded-md text-[10px] font-medium transition-all text-indigo-700 hover:bg-white/50">Корпоративное</button>
+                    <button onclick="setSimulatedRole('consultant_tax')" id="sim-consultant_tax" class="px-2 py-1 rounded-md text-[10px] font-medium transition-all text-indigo-700 hover:bg-white/50">Налоговое</button>
+                    <button onclick="setSimulatedRole('contracts')" id="sim-contracts" class="px-2 py-1 rounded-md text-[10px] font-medium transition-all text-indigo-700 hover:bg-white/50">Отдел договоров</button>
+                    <button onclick="setSimulatedRole('partner')" id="sim-partner" class="px-2 py-1 rounded-md text-[10px] font-medium transition-all text-indigo-700 hover:bg-white/50">Партнёр</button>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 items-center w-full xl:w-auto">
+            <div class="relative w-full sm:w-64">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </span>
+                <input type="text" id="role-search" oninput="handleSearch(this.value)" placeholder="Поиск роли (напр. трудовое)..."
+                       class="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white">
+            </div>
+            <button id="btn-reset" onclick="resetFilters()" class="hidden px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-xl font-medium">Сбросить</button>
+        </div>
+    </div>
+
+    <!-- VIEW 1: DIAGRAM -->
+    <div id="view-diagram" class="space-y-10 transition-all duration-300">
+        <div class="flex justify-center">
+            <div class="relative group">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur opacity-35"></div>
+                <div class="relative bg-gradient-to-r from-indigo-600 to-indigo-800 text-white rounded-2xl shadow-xl p-5 w-80 border border-indigo-500/20">
+                    <span class="text-[10px] font-bold tracking-widest text-indigo-200 uppercase">Корневой узел</span>
+                    <h2 class="font-extrabold text-lg">Legal RAG Assist</h2>
+                    <p class="text-[11px] text-indigo-200 mt-1">Ассистент юрфирмы · Security_gag_legal</p>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-center -my-6">
+            <div class="flex flex-col items-center">
+                <div class="h-8 w-0.5 bg-indigo-300"></div>
+                <div class="w-6 h-6 text-indigo-500 animate-bounce-slow flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6 items-start">
+
+            <!-- DB_1 -->
+            <div id="col-db_1" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col transition-all duration-300">
+                <div class="w-full bg-gradient-to-r from-emerald-600 to-emerald-800 text-white rounded-xl shadow-md p-3 mb-3">
+                    <span class="text-[9px] font-bold tracking-wider text-emerald-200 uppercase">Уровень 1</span>
+                    <h3 class="font-bold text-base">БД_1 · Общие материалы</h3>
+                </div>
+                <div class="w-full text-center text-[10px] text-slate-400 font-medium bg-slate-50 border border-slate-100 rounded-lg p-1.5 mb-3">
+                    📁 регламенты, этика, FAQ, шаблоны писем
+                </div>
+                <div class="w-full bg-slate-50 rounded-xl border border-slate-200/60 p-3 space-y-0.5">
+                    <h4 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 text-center">Разрешённые роли</h4>
+                    <div data-role="административное" class="user-row flex justify-between items-center p-2 border-b border-slate-100"><span class="text-xs font-semibold text-slate-700">консультант (адм.)</span><span class="text-[10px] text-blue-600 font-bold">👁️</span></div>
+                    <div data-role="трудовое" class="user-row flex justify-between items-center p-2 border-b border-slate-100"><span class="text-xs font-semibold text-slate-700">консультант (труд.)</span><span class="text-[10px] text-blue-600 font-bold">👁️</span></div>
+                    <div data-role="корпоративное" class="user-row flex justify-between items-center p-2 border-b border-slate-100"><span class="text-xs font-semibold text-slate-700">консультант (корп.)</span><span class="text-[10px] text-blue-600 font-bold">👁️</span></div>
+                    <div data-role="налоговое" class="user-row flex justify-between items-center p-2 border-b border-slate-100"><span class="text-xs font-semibold text-slate-700">консультант (налог.)</span><span class="text-[10px] text-blue-600 font-bold">👁️</span></div>
+                    <div data-role="отдел договоров" class="user-row flex justify-between items-center p-2 border-b border-slate-100"><span class="text-xs font-semibold text-slate-700">отдел договоров</span><span class="text-[10px] text-blue-600 font-bold">👁️</span></div>
+                    <div data-role="партнёр" class="user-row flex justify-between items-center p-2"><span class="text-xs font-bold text-slate-800">партнёр</span><div class="flex gap-1"><span class="text-[10px] text-blue-600 font-bold">👁️</span><span class="text-[10px] text-teal-600 font-bold">✏️</span></div></div>
+                </div>
+            </div>
+
+            <!-- DB_2 Practices -->
+            <div id="col-db_2" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col transition-all duration-300 xl:col-span-1">
+                <div class="w-full bg-gradient-to-r from-emerald-600 to-emerald-800 text-white rounded-xl shadow-md p-3 mb-3">
+                    <span class="text-[9px] font-bold tracking-wider text-emerald-200 uppercase">Уровень 1</span>
+                    <h3 class="font-bold text-base">БД_2 · Практики</h3>
+                </div>
+                <div class="w-full text-center text-[10px] text-slate-400 font-medium bg-slate-50 border border-slate-100 rounded-lg p-1.5 mb-3">
+                    📁 базы знаний по отраслям права
+                </div>
+                <div class="grid grid-cols-1 gap-3">
+                    <div id="sub-admin" class="bg-amber-50/40 rounded-xl p-3 border border-amber-200/80 transition-all duration-300">
+                        <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg p-2 mb-2 text-center">
+                            <h4 class="font-bold text-xs uppercase">Административное</h4>
+                            <span class="text-[8px] text-amber-100">жалобы, КоАП, возражения</span>
+                        </div>
+                        <div class="space-y-0.5">
+                            <div data-role="административное" class="user-row flex justify-between py-1 px-2 text-xs"><span class="font-semibold">консультант (адм.)</span><span class="text-blue-600 font-bold">👁️</span></div>
+                            <div data-role="партнёр" class="user-row flex justify-between py-1 px-2 text-xs"><span class="font-bold">партнёр</span><span class="text-blue-600 font-bold">👁️</span></div>
+                        </div>
+                    </div>
+                    <div id="sub-labor" class="bg-amber-50/40 rounded-xl p-3 border border-amber-200/80 transition-all duration-300">
+                        <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg p-2 mb-2 text-center">
+                            <h4 class="font-bold text-xs uppercase">Трудовое</h4>
+                            <span class="text-[8px] text-amber-100">ТК РФ, увольнения, ЛНА</span>
+                        </div>
+                        <div class="space-y-0.5">
+                            <div data-role="трудовое" class="user-row flex justify-between py-1 px-2 text-xs"><span class="font-semibold">консультант (труд.)</span><span class="text-blue-600 font-bold">👁️</span></div>
+                            <div data-role="партнёр" class="user-row flex justify-between py-1 px-2 text-xs"><span class="font-bold">партнёр</span><span class="text-blue-600 font-bold">👁️</span></div>
+                        </div>
+                    </div>
+                    <div id="sub-corp" class="bg-amber-50/40 rounded-xl p-3 border border-amber-200/80 transition-all duration-300">
+                        <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg p-2 mb-2 text-center">
+                            <h4 class="font-bold text-xs uppercase">Корпоративное</h4>
+                            <span class="text-[8px] text-amber-100">уставы, M&A, собрания</span>
+                        </div>
+                        <div class="space-y-0.5">
+                            <div data-role="корпоративное" class="user-row flex justify-between py-1 px-2 text-xs"><span class="font-semibold">консультант (корп.)</span><span class="text-blue-600 font-bold">👁️</span></div>
+                            <div data-role="партнёр" class="user-row flex justify-between py-1 px-2 text-xs"><span class="font-bold">партнёр</span><span class="text-blue-600 font-bold">👁️</span></div>
+                        </div>
+                    </div>
+                    <div id="sub-tax" class="bg-amber-50/40 rounded-xl p-3 border border-amber-200/80 transition-all duration-300">
+                        <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg p-2 mb-2 text-center">
+                            <h4 class="font-bold text-xs uppercase">Налоговое</h4>
+                            <span class="text-[8px] text-amber-100">ФНС, доначисления, методики</span>
+                        </div>
+                        <div class="space-y-0.5">
+                            <div data-role="налоговое" class="user-row flex justify-between py-1 px-2 text-xs"><span class="font-semibold">консультант (налог.)</span><span class="text-blue-600 font-bold">👁️</span></div>
+                            <div data-role="партнёр" class="user-row flex justify-between py-1 px-2 text-xs"><span class="font-bold">партнёр</span><span class="text-blue-600 font-bold">👁️</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DB_3 Contracts -->
+            <div id="col-db_3" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col transition-all duration-300">
+                <div class="w-full bg-gradient-to-r from-emerald-600 to-emerald-800 text-white rounded-xl shadow-md p-3 mb-3">
+                    <span class="text-[9px] font-bold tracking-wider text-emerald-200 uppercase">Уровень 1</span>
+                    <h3 class="font-bold text-base">БД_3 · Отдел договоров</h3>
+                </div>
+                <div class="w-full text-center text-[10px] text-slate-400 font-medium bg-slate-50 border border-slate-100 rounded-lg p-1.5 mb-3">
+                    📁 изолированный контур контрактов
+                </div>
+                <div id="sub-drafts" class="bg-amber-50/40 rounded-xl p-3 border border-amber-200/80 mb-3 transition-all duration-300">
+                    <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg p-2 mb-2 text-center">
+                        <h4 class="font-bold text-xs uppercase">Черновики</h4>
+                    </div>
+                    <div class="flex flex-col gap-1 mb-2">
+                        <span class="text-[9px] bg-red-50 text-red-800 border border-red-200 rounded px-1 py-0.5 text-center">🔑 Доступ по ID дела</span>
+                        <span class="text-[9px] bg-indigo-50 text-indigo-800 border border-indigo-200 rounded px-1 py-0.5 text-center">🔑 MFA</span>
+                    </div>
+                    <div data-role="отдел договоров" class="user-row flex justify-between py-1 px-2 text-xs border-b border-amber-100"><span class="font-semibold">отдел договоров</span><div class="flex gap-1"><span class="text-blue-600 font-bold">👁️</span><span class="text-teal-600 font-bold">✏️</span></div></div>
+                    <div data-role="партнёр" class="user-row flex justify-between py-1 px-2 text-xs"><span class="font-bold">партнёр</span><span class="text-blue-600 font-bold">👁️</span></div>
+                </div>
+                <div id="sub-signed" class="bg-amber-50/40 rounded-xl p-3 border border-amber-200/80 transition-all duration-300">
+                    <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg p-2 mb-2 text-center">
+                        <h4 class="font-bold text-xs uppercase">Подписанные</h4>
+                    </div>
+                    <div class="flex flex-col gap-1 mb-2">
+                        <span class="text-[9px] bg-sky-50 text-sky-800 border border-sky-200 rounded px-1 py-0.5 text-center">🔒 Маскирование PII</span>
+                        <span class="text-[9px] bg-red-50 text-red-800 border border-red-200 rounded px-1 py-0.5 text-center">🔑 Доступ по ID</span>
+                    </div>
+                    <div data-role="отдел договоров" class="user-row flex justify-between py-1 px-2 text-xs border-b border-amber-100"><span class="font-semibold">отдел договоров</span><span class="text-blue-600 font-bold">👁️ (ID)</span></div>
+                    <div data-role="партнёр" class="user-row flex justify-between py-1 px-2 text-xs"><span class="font-bold">партнёр</span><span class="text-blue-600 font-bold">👁️</span></div>
+                </div>
+            </div>
+
+            <!-- DB_4 Internal -->
+            <div id="col-db_4" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col transition-all duration-300">
+                <div class="w-full bg-gradient-to-r from-emerald-600 to-emerald-800 text-white rounded-xl shadow-md p-3 mb-3">
+                    <span class="text-[9px] font-bold tracking-wider text-emerald-200 uppercase">Уровень 1</span>
+                    <h3 class="font-bold text-base">БД_4 · Справочники</h3>
+                </div>
+                <div class="w-full text-center text-[10px] text-slate-400 font-medium bg-slate-50 border border-slate-100 rounded-lg p-1.5 mb-3">
+                    📁 сотрудники, клиенты, карточки дел
+                </div>
+                <div id="sub-staff" class="bg-amber-50/40 rounded-xl p-3 border border-amber-200/80 mb-3 transition-all duration-300">
+                    <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg p-2 mb-2 text-center">
+                        <h4 class="font-bold text-xs uppercase">Сотрудники</h4>
+                    </div>
+                    <span class="text-[9px] bg-teal-50 text-teal-800 border border-teal-200 rounded px-1 py-0.5 text-center block mb-2">📝 Авто-логирование</span>
+                    <div data-role="партнёр" class="user-row flex justify-between py-1 px-2 text-xs"><span class="font-bold">партнёр</span><div class="flex gap-1"><span class="text-blue-600 font-bold">👁️</span><span class="text-teal-600 font-bold">✏️</span></div></div>
+                </div>
+                <div id="sub-clients" class="bg-amber-50/40 rounded-xl p-3 border border-amber-200/80 transition-all duration-300">
+                    <div class="bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg p-2 mb-2 text-center">
+                        <h4 class="font-bold text-xs uppercase">Клиенты и дела</h4>
+                    </div>
+                    <span class="text-[9px] bg-teal-50 text-teal-800 border border-teal-200 rounded px-1 py-0.5 text-center block mb-2">📝 Авто-логирование</span>
+                    <div data-role="партнёр" class="user-row flex justify-between py-1 px-2 text-xs"><span class="font-bold">партнёр</span><div class="flex gap-1"><span class="text-blue-600 font-bold">👁️</span><span class="text-teal-600 font-bold">✏️</span></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 2: MATRIX -->
+    <div id="view-matrix" class="hidden transition-all duration-300">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-slate-100 bg-slate-50/50">
+                <h3 class="font-bold text-slate-900 text-lg">Сводная матрица прав</h3>
+                <p class="text-xs text-slate-500 mt-1">Кто что может смотреть и редактировать в Legal RAG Assist.</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
+                            <th class="p-4 pl-6">Сущность</th>
+                            <th class="p-4">Уровень</th>
+                            <th class="p-4">Роль</th>
+                            <th class="p-4 text-center">Просмотр</th>
+                            <th class="p-4 text-center">Редактирование</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm" id="matrix-body">
+                        <tr data-row-role="административное" class="hover:bg-slate-50/60"><td class="p-4 pl-6 font-semibold">БД_1 Общие</td><td class="p-4"><span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[11px] font-bold">База</span></td><td class="p-4">консультант (адм.)</td><td class="p-4 text-center text-blue-600 font-bold">✓</td><td class="p-4 text-center text-slate-300">-</td></tr>
+                        <tr data-row-role="трудовое" class="hover:bg-slate-50/60"><td class="p-4 pl-6 font-semibold">БД_1 Общие</td><td class="p-4"><span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[11px] font-bold">База</span></td><td class="p-4">консультант (труд.)</td><td class="p-4 text-center text-blue-600 font-bold">✓</td><td class="p-4 text-center text-slate-300">-</td></tr>
+                        <tr data-row-role="корпоративное" class="hover:bg-slate-50/60"><td class="p-4 pl-6 font-semibold">БД_1 Общие</td><td class="p-4"><span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[11px] font-bold">База</span></td><td class="p-4">консультант (корп.)</td><td class="p-4 text-center text-blue-600 font-bold">✓</td><td class="p-4 text-center text-slate-300">-</td></tr>
+                        <tr data-row-role="налоговое" class="hover:bg-slate-50/60"><td class="p-4 pl-6 font-semibold">БД_1 Общие</td><td class="p-4"><span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[11px] font-bold">База</span></td><td class="p-4">консультант (налог.)</td><td class="p-4 text-center text-blue-600 font-bold">✓</td><td class="p-4 text-center text-slate-300">-</td></tr>
+                        <tr data-row-role="отдел договоров" class="hover:bg-slate-50/60"><td class="p-4 pl-6 font-semibold">БД_1 Общие</td><td class="p-4"><span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[11px] font-bold">База</span></td><td class="p-4">отдел договоров</td><td class="p-4 text-center text-blue-600 font-bold">✓</td><td class="p-4 text-center text-slate-300">-</td></tr>
+                        <tr data-row-role="партнёр" class="hover:bg-slate-50/60"><td class="p-4 pl-6 font-semibold">БД_1 Общие</td><td class="p-4"><span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[11px] font-bold">База</span></td><td class="p-4 font-semibold">партнёр</td><td class="p-4 text-center text-blue-600 font-bold">✓</td><td class="p-4 text-center text-teal-600 font-bold">✓</td></tr>
+                        <tr data-row-role="административное" class="hover:bg-slate-50/60"><td class="p-4 pl-6"><span class="font-semibold">БД_2</span> → <span class="font-bold text-amber-600">Адм. право</span></td><td class="p-4"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-[11px] font-bold">L2</span></td><td class="p-4">консультант (адм.)</td><td class="p-4 text-center text-blue-600 font-bold">✓</td><td class="p-4 text-center text-slate-300">-</td></tr>
+                        <tr data-row-role="трудовое" class="hover:bg-slate-50/60"><td class="p-4 pl-6"><span class="font-semibold">БД_2</span> → <span class="font-bold text-amber-600">Трудовое</span></td><td class="p-4"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-[11px] font-bold">L2</span></td><td class="p-4">консультант (труд.)</td><td class="p-4 text-center text-blue-600 font-bold">✓</td><td class="p-4 text-center text-slate-300">-</td></tr>
+                        <tr data-row-role="корпоративное" class="hover:bg-slate-50/60"><td class="p-4 pl-6"><span class="font-semibold">БД_2</span> → <span class="font-bold text-amber-600">Корпоративное</span></td><td class="p-4"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-[11px] font-bold">L2</span></td><td class="p-4">консультант (корп.)</td><td class="p-4 text-center text-blue-600 font-bold">✓</td><td class="p-4 text-center text-slate-300">-</td></tr>
+                        <tr data-row-role="налоговое" class="hover:bg-slate-50/60"><td class="p-4 pl-6"><span class="font-semibold">БД_2</span> → <span class="font-bold text-amber-600">Налоговое</span></td><td class="p-4"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-[11px] font-bold">L2</span></td><td class="p-4">консультант (налог.)</td><td class="p-4 text-center text-blue-600 font-bold">✓</td><td class="p-4 text-center text-slate-300">-</td></tr>
+                        <tr data-row-role="партнёр" class="hover:bg-slate-50/60"><td class="p-4 pl-6"><span class="font-semibold">БД_2</span> → все практики</td><td class="p-4"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-[11px] font-bold">L2</span></td><td class="p-4 font-semibold">партнёр</td><td class="p-4 text-center text-blue-600 font-bold">✓</td><td class="p-4 text-center text-slate-300">-</td></tr>
+                        <tr data-row-role="отдел договоров" class="hover:bg-slate-50/60"><td class="p-4 pl-6"><span class="font-semibold">БД_3</span> → <span class="font-bold text-amber-600">Черновики</span> 🔑</td><td class="p-4"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-[11px] font-bold">L2</span></td><td class="p-4">отдел договоров</td><td class="p-4 text-center text-blue-600 font-bold">✓ (ID)</td><td class="p-4 text-center text-teal-600 font-bold">✓</td></tr>
+                        <tr data-row-role="отдел договоров" class="hover:bg-slate-50/60"><td class="p-4 pl-6"><span class="font-semibold">БД_3</span> → <span class="font-bold text-amber-600">Подписанные</span> 🔒</td><td class="p-4"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-[11px] font-bold">L2</span></td><td class="p-4">отдел договоров</td><td class="p-4 text-center text-blue-600 font-bold">✓ (ID)</td><td class="p-4 text-center text-slate-300">-</td></tr>
+                        <tr data-row-role="партнёр" class="hover:bg-slate-50/60"><td class="p-4 pl-6"><span class="font-semibold">БД_3</span> → договоры</td><td class="p-4"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-[11px] font-bold">L2</span></td><td class="p-4 font-semibold">партнёр</td><td class="p-4 text-center text-blue-600 font-bold">✓</td><td class="p-4 text-center text-slate-300">-</td></tr>
+                        <tr data-row-role="партнёр" class="hover:bg-slate-50/60"><td class="p-4 pl-6"><span class="font-semibold">БД_4</span> → Сотрудники / Клиенты 📝</td><td class="p-4"><span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded text-[11px] font-bold">L2</span></td><td class="p-4 font-semibold">партнёр</td><td class="p-4 text-center text-blue-600 font-bold">✓</td><td class="p-4 text-center text-teal-600 font-bold">✓ (Log)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 3: SECURITY -->
+    <div id="view-security" class="hidden space-y-8 transition-all duration-300">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-4 mb-6">
+                <span class="text-2xl">🔒</span>
+                <div>
+                    <h3 class="font-bold text-slate-900 text-lg">1. Маркеры безопасности</h3>
+                    <p class="text-xs text-slate-500">Ограничения на схеме доступа юрфирмы</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                    <span class="inline-block px-2.5 py-1 bg-sky-100 text-sky-800 rounded text-xs font-bold mb-2">🔒 Маскирование PII</span>
+                    <h4 class="font-bold text-sm text-slate-800 mb-1">БД_3 · Подписанные договоры</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">ФИО клиента, ИНН, банковские реквизиты не уходят в LLM в открытом виде — заменяются на <code class="bg-white px-1 rounded text-red-600">[Client]</code>, <code class="bg-white px-1 rounded text-red-600">[INN]</code>, <code class="bg-white px-1 rounded text-red-600">[Account]</code>.</p>
+                </div>
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                    <span class="inline-block px-2.5 py-1 bg-red-100 text-red-800 rounded text-xs font-bold mb-2">🔑 Доступ по ID дела</span>
+                    <h4 class="font-bold text-sm text-slate-800 mb-1">БД_3 · Отдел договоров</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">Нельзя запросить «все договоры». Доступ только к файлу/карточке с явным номером дела или ID контракта в текущем запросе.</p>
+                </div>
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                    <span class="inline-block px-2.5 py-1 bg-indigo-100 text-indigo-800 rounded text-xs font-bold mb-2">🔑 MFA</span>
+                    <h4 class="font-bold text-sm text-slate-800 mb-1">Переход к БД_3 и БД_4</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">Договоры и внутренние справочники требуют дополнительного подтверждения (OTP / токен / согласие с регламентом).</p>
+                </div>
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                    <span class="inline-block px-2.5 py-1 bg-teal-100 text-teal-800 rounded text-xs font-bold mb-2">📝 Журнал изменений</span>
+                    <h4 class="font-bold text-sm text-slate-800 mb-1">БД_4 · Сотрудники и клиенты</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">Любая правка партнёра пишется в неудаляемый лог (только добавление записей, стереть историю нельзя).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-4 mb-6">
+                <span class="text-2xl">📋</span>
+                <div>
+                    <h3 class="font-bold text-slate-900 text-lg">2. Правила доступа</h3>
+                    <p class="text-xs text-slate-500">Смысловая логика Legal RAG Assist</p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="border-l-4 border-indigo-500 pl-4 py-1">
+                    <h4 class="font-bold text-slate-800 text-base">Правило А: Своя практика</h4>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">Юрист-консультант работает только со своей отраслью (адм. / трудовое / корпоративное / налоговое). Чужие практики и весь архив договоров в ответе не появляются.</p>
+                </div>
+                <div class="border-l-4 border-indigo-500 pl-4 py-1">
+                    <h4 class="font-bold text-slate-800 text-base">Правило Б: Контракт → отдел договоров</h4>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed">После подготовки контракт уходит в изолированный контур БД_3. Консультанты практик туда не входят. Отдел договоров видит документ по ID дела; партнёр — для контроля.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-4 mb-6">
+                <span class="text-2xl">🎯</span>
+                <div>
+                    <h3 class="font-bold text-slate-900 text-lg">3. Цели системных промптов</h3>
+                    <p class="text-xs text-slate-500">Поведение ИИ в зависимости от роли</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-indigo-50/40 rounded-xl p-4 border border-indigo-100/50">
+                    <h4 class="font-bold text-sm text-indigo-900 mb-2">🎯 Консультант (практика)</h4>
+                    <ul class="text-xs text-slate-700 list-disc list-inside space-y-1">
+                        <li>Ответы только по своей отрасли и общим материалам.</li>
+                        <li>Запрет на выдачу чужой практики и архива договоров.</li>
+                        <li>Вежливый отказ при попытке выйти за периметр роли.</li>
+                    </ul>
+                </div>
+                <div class="bg-indigo-50/40 rounded-xl p-4 border border-indigo-100/50">
+                    <h4 class="font-bold text-sm text-indigo-900 mb-2">🎯 Отдел договоров</h4>
+                    <ul class="text-xs text-slate-700 list-disc list-inside space-y-1">
+                        <li>Работа только с договором / делом по явному ID.</li>
+                        <li>Запрет сквозного листинга и «всех контрактов».</li>
+                        <li>Маскирование реквизитов клиента перед ответом.</li>
+                    </ul>
+                </div>
+                <div class="bg-indigo-50/40 rounded-xl p-4 border border-indigo-100/50 md:col-span-2">
+                    <h4 class="font-bold text-sm text-indigo-900 mb-2">🎯 Партнёр</h4>
+                    <ul class="text-xs text-slate-700 list-disc list-inside space-y-1">
+                        <li>Сквозной просмотр практик и договоров для контроля качества.</li>
+                        <li>Правки справочников (сотрудники / клиенты) с обязательной записью в журнал.</li>
+                        <li>Не разглашать внутреннюю структуру логов клиентам во внешних ответах.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-12 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <h3 class="font-bold text-slate-900 text-base mb-4">Индикаторы Security_gag_legal</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-sm text-slate-600">
+            <div><span class="font-semibold text-slate-800">🔒 PII</span><p class="text-xs text-slate-500 mt-1">Реквизиты клиента маскируются перед LLM.</p></div>
+            <div><span class="font-semibold text-slate-800">🔑 ID / MFA</span><p class="text-xs text-slate-500 mt-1">Договоры — по номеру дела; MFA на БД_3 и БД_4.</p></div>
+            <div><span class="font-semibold text-slate-800">📝 Лог</span><p class="text-xs text-slate-500 mt-1">Правки справочников пишутся навсегда.</p></div>
+            <div><span class="font-semibold text-slate-800">👁️‍🗨️ Симуляция</span><p class="text-xs text-slate-500 mt-1">Выберите роль сверху — недоступные блоки погаснут.</p></div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    let currentView = 'diagram';
+    let currentSimulatedRole = 'all';
+
+    const roleIds = ['all', 'consultant_admin', 'consultant_labor', 'consultant_corp', 'consultant_tax', 'contracts', 'partner'];
+
+    const searchMap = {
+        consultant_admin: 'административное',
+        consultant_labor: 'трудовое',
+        consultant_corp: 'корпоративное',
+        consultant_tax: 'налоговое',
+        contracts: 'отдел договоров',
+        partner: 'партнёр'
+    };
+
+    function switchView(view) {
+        currentView = view;
+        ['diagram', 'matrix', 'security'].forEach(v => {
+            document.getElementById('view-' + v).classList.add('hidden');
+            document.getElementById('btn-' + v).className = 'px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 text-slate-600 hover:text-slate-900';
+        });
+        document.getElementById('view-' + view).classList.remove('hidden');
+        document.getElementById('btn-' + view).className = 'px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 bg-white text-slate-900 shadow-sm';
+    }
+
+    function setAllOpacity(nodes, value) {
+        nodes.forEach(el => { if (el) el.style.opacity = value; });
+    }
+
+    function setSimulatedRole(role) {
+        currentSimulatedRole = role;
+
+        roleIds.forEach(r => {
+            const btn = document.getElementById('sim-' + r);
+            if (!btn) return;
+            btn.className = r === role
+                ? 'px-2 py-1 rounded-md text-[10px] font-semibold transition-all bg-indigo-600 text-white shadow-sm'
+                : 'px-2 py-1 rounded-md text-[10px] font-medium transition-all text-indigo-700 hover:bg-white/50';
+        });
+
+        const colDb1 = document.getElementById('col-db_1');
+        const colDb2 = document.getElementById('col-db_2');
+        const colDb3 = document.getElementById('col-db_3');
+        const colDb4 = document.getElementById('col-db_4');
+        const subAdmin = document.getElementById('sub-admin');
+        const subLabor = document.getElementById('sub-labor');
+        const subCorp = document.getElementById('sub-corp');
+        const subTax = document.getElementById('sub-tax');
+
+        setAllOpacity([colDb1, colDb2, colDb3, colDb4, subAdmin, subLabor, subCorp, subTax], '1');
+
+        if (role === 'consultant_admin') {
+            setAllOpacity([colDb3, colDb4, subLabor, subCorp, subTax], '0.12');
+        } else if (role === 'consultant_labor') {
+            setAllOpacity([colDb3, colDb4, subAdmin, subCorp, subTax], '0.12');
+        } else if (role === 'consultant_corp') {
+            setAllOpacity([colDb3, colDb4, subAdmin, subLabor, subTax], '0.12');
+        } else if (role === 'consultant_tax') {
+            setAllOpacity([colDb3, colDb4, subAdmin, subLabor, subCorp], '0.12');
+        } else if (role === 'contracts') {
+            setAllOpacity([colDb2, colDb4], '0.12');
+        } else if (role === 'partner') {
+            // full access
+        }
+
+        if (role !== 'all') {
+            handleSearch(searchMap[role] || role);
+        } else {
+            resetFilters();
+        }
+    }
+
+    function handleSearch(query) {
+        const resetBtn = document.getElementById('btn-reset');
+        const cleanQuery = query.trim().toLowerCase();
+        if (cleanQuery.length > 0) resetBtn.classList.remove('hidden');
+        else resetBtn.classList.add('hidden');
+
+        document.querySelectorAll('.user-row').forEach(row => {
+            const role = (row.getAttribute('data-role') || '').toLowerCase();
+            if (cleanQuery === '') {
+                row.className = 'user-row flex justify-between items-center p-2 hover:bg-white rounded-lg transition-all border-b border-slate-100 last:border-none opacity-100';
+            } else if (role.includes(cleanQuery)) {
+                row.className = 'user-row flex justify-between items-center p-2 bg-yellow-100 border-l-4 border-yellow-500 rounded-r-lg transition-all opacity-100 font-bold scale-[1.02] shadow-sm';
+            } else {
+                row.className = 'user-row flex justify-between items-center p-2 rounded-lg transition-all opacity-20';
+            }
+        });
+
+        document.querySelectorAll('#matrix-body tr').forEach(mRow => {
+            const role = (mRow.getAttribute('data-row-role') || '').toLowerCase();
+            if (cleanQuery === '') {
+                mRow.style.display = '';
+                mRow.style.backgroundColor = '';
+            } else if (role.includes(cleanQuery)) {
+                mRow.style.display = '';
+                mRow.style.backgroundColor = '#fef08a';
+            } else {
+                mRow.style.display = 'none';
+            }
+        });
+    }
+
+    function resetFilters() {
+        const searchInput = document.getElementById('role-search');
+        if (searchInput) searchInput.value = '';
+        handleSearch('');
+        if (currentSimulatedRole === 'all') {
+            setAllOpacity([
+                document.getElementById('col-db_1'),
+                document.getElementById('col-db_2'),
+                document.getElementById('col-db_3'),
+                document.getElementById('col-db_4'),
+                document.getElementById('sub-admin'),
+                document.getElementById('sub-labor'),
+                document.getElementById('sub-corp'),
+                document.getElementById('sub-tax')
+            ], '1');
+        }
+    }
+
+    window.onload = function () {
+        console.log('Security_gag_legal Access Map initialized.');
+    };
+</script>
+</body>
+</html>
